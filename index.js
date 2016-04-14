@@ -3,7 +3,7 @@
 var express = require('express'),
     app = express();
 var bodyParser = require("body-parser");
-var uuid = require('node-uuid');    //tekee sen id
+var uuid = require('node-uuid');    
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -18,9 +18,11 @@ app.use(bodyParser.json()); // Body parser use JSON data
 //create a connection to mySQL
 connection.connect(function (err) {
     if (!err) {
-        console.log("Success...");
+        console.log("Connected to database.");
     } else {
         console.log("Error...");
+        console.log(err);
+        process.exit(1);
     }
 });
 
@@ -56,7 +58,7 @@ app.get('/products', function (req, res) {
             data["Products"] = rows;
             res.json(data);
         } else {
-            data["Products"] = 'No thigs Found..';
+            data["Products"] = 'No things Found..';
             res.json(data);
         }
     });
@@ -87,7 +89,7 @@ app.post('/materials', function (req, res) {
             // inserting data to mySQL
             connection.query("INSERT INTO materials (material_id,category,type,quantity,supplier,arrival_date) VALUES ('"+id+"','"+category+"','"+type+"','"+quantity+"','"+supplier+"','"+date+"')", function (err, rows, fields) {
                 if (err) {
-                    console.log("Error Adding data");
+                    console.log("Error Adding data: " + err);
                     data = "Error Adding data";
                 } else {
                     
