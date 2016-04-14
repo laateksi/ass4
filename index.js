@@ -39,10 +39,16 @@ app.get('/warehouse', function(req, res){
 
 app.get('/warehouse/materials', function (req, res) {
     var data = {
+        "Back to Warehouse" : "/warehouse",
         "error": 1,
         "Materials": ""
     };
 
+    var materialsView = {
+        back_to_warehouse : "/warehouse",
+        products : "/warehouse/products"
+    };
+    
     connection.query("SELECT * from materials", function (err, rows, fields) {
         if (rows.length != 0) {
             data["error"] = 0;
@@ -57,6 +63,7 @@ app.get('/warehouse/materials', function (req, res) {
 
 app.get('/warehouse/products', function (req, res) {
     var data = {
+        "Back to Warehouse" : "/warehouse",
         "error": 1,
         "Products": ""
     };
@@ -113,13 +120,13 @@ app.post('/warehouse/materials', function (req, res) {
             
         } else {
             console.log("Empty attributes!")
-            data = "Empty attributes!";
-            res.json(data);
+            data = "Bad request: Empty attributes!";
+            res.status(400).json(data); //Bad request
         }
     } else {
         console.log("You must fill category, type, quantity, supplier and arrival_date");
         data = "You must fill category, type, quantity, supplier and arrival_date";
-        res.json(data);
+        res.status(400).json(data);
     };
 });
 
@@ -145,23 +152,24 @@ app.post('/warehouse/products', function (req, res) {
                 if (err) {
                     console.log("Error Adding data");
                     data = "Error Adding data";
+                    res.status(400).json(data);
                 } else {
 
                     console.log("Product Added Successfully");
                     data = "Product Added Successfully";
+                    res.status(201).json(data);
                 }
-                res.json(data);
             });
 
         } else {
             console.log("Empty attributes!");
-            data = "Empty attributes!";
-            res.json(data);
+            data = "Bad request: Empty attributes!";
+            res.status(400).json(data);
         }
     } else {
         console.log("You must fill category, type, quantity, customer and arrival_date");
-        data = "You must fill category, type, quantity, customer and arrival_date";
-        res.json(data);
+        data = "Bad request: You must fill category, type, quantity, customer and arrival_date";
+        res.status(400).json(data);
     };
 });
 //----POST--------------------------------------------------------------------------------
@@ -182,23 +190,24 @@ app.delete('/warehouse/products', function (req, res) {
                 if (err) {
                     console.log("Error Deleting data");
                     data = "Error Deleting data";
+                    res.status(404).json(data); //Not found
                 } else {
 
                     console.log("Product Deleted Successfully");
-                    data = "Product Deleted Successfully";
+                    data = "OK. Product Deleted Successfully.";
+                    res.status(200).json(data); //OK
                 }
-                res.json(data);
             });
 
         } else {
             console.log("id value empty!");
-            data = "id value empty!";
-            res.json(data);
+            data = "Bad request: id value empty!";
+            res.status(400).json(data);
         }
     } else {
         console.log("You must fill id!")
-        data = "You must fill id!";
-        res.json(data);
+        data = "Bad request: You must fill id!";
+        res.status(400).json(data);
     };
 });
 
@@ -218,23 +227,24 @@ app.delete('/warehouse/materials', function (req, res) {
                 if (err) {
                     console.log("Error Deleting data");
                     data = "Error Deleting data";
+                    res.status(404).json(data); //Not found
                 } else {
 
                     console.log("Material Deleted Successfully");
                     data = "Material Deleted Successfully";
+                    res.status(200).json(data); //OK
                 }
-                res.json(data);
             });
 
         } else {
             console.log("id value empty!");
-            data = "id value empty!";
-            res.json(data);
+            data = "Bad request: id value empty!";
+            res.status(400).json(data);
         }
     } else {
         console.log("You must fill id!")
-        data = "You must fill id!";
-        res.json(data);
+        data = "Bad request: You must fill id!";
+        res.status(400).json(data);
     };
 });
 
