@@ -20,6 +20,7 @@ connection.connect(function (err) {
     if (!err) {
         console.log("Connected to database.");
     } else {
+        res.statusCode = 503; //Service unavailable
         console.log("Error...");
         console.log(err);
         process.exit(1);
@@ -28,7 +29,15 @@ connection.connect(function (err) {
 
 
 //GET---------------------------------------------------------------------------
-app.get('/materials', function (req, res) {
+app.get('/warehouse', function(req, res){
+    var warehouseView = {
+        materials : "/warehouse/materials",
+        products : "/warehouse/products"
+    };
+    res.send(warehouseView);
+});
+
+app.get('/warehouse/materials', function (req, res) {
     var data = {
         "error": 1,
         "Materials": ""
@@ -38,15 +47,15 @@ app.get('/materials', function (req, res) {
         if (rows.length != 0) {
             data["error"] = 0;
             data["Materials"] = rows;
-            res.json(data);
+            res.status(200).json(data);
         } else {
-            data["Materials"] = 'No thigs Found..';
-            res.json(data);
+            data["Materials"] = 'No materials found..';
+            res.status(404).json(data);
         }
     });
 });
 
-app.get('/products', function (req, res) {
+app.get('/warehouse/products', function (req, res) {
     var data = {
         "error": 1,
         "Products": ""
@@ -56,10 +65,10 @@ app.get('/products', function (req, res) {
         if (rows.length != 0) {
             data["error"] = 0;
             data["Products"] = rows;
-            res.json(data);
+            res.status(200).json(data);
         } else {
-            data["Products"] = 'No things Found..';
-            res.json(data);
+            data["Products"] = 'No products found..';
+            res.status(404).json(data);
         }
     });
 });
@@ -68,7 +77,7 @@ app.get('/products', function (req, res) {
 //-POST----------------------------------------------------------------------
 //--Materials
 
-app.post('/materials', function (req, res) {
+app.post('/warehouse/materials', function (req, res) {
     var query = req.query;
 
     //Test all attributes are given (id, category, type, quantity, supplier, arrival_date)
@@ -91,13 +100,15 @@ app.post('/materials', function (req, res) {
                 if (err) {
                     console.log("Error Adding data: " + err);
                     data = "Error Adding data";
+                    //respond to postman
+                    res.status(400).json(data); //400 Query not complete
                 } else {
                     
-                    console.log("Material Added Successfully");
-                    data = "Material Added Successfully";
+                    console.log("Material Created Successfully");
+                    data = "Material Created Successfully";
+                    //respond to postman
+                    res.status(201).json(data); //201: Created
                 }
-                //respond to postman
-                res.json(data);
             });
             
         } else {
@@ -113,7 +124,7 @@ app.post('/materials', function (req, res) {
 });
 
 //-Products----------------------------------------------
-app.post('/products', function (req, res) {
+app.post('/warehouse/products', function (req, res) {
     var query = req.query;
 
     //Test all attributes are given (id, category, type, quantity, supplier, arrival_date)
@@ -157,7 +168,7 @@ app.post('/products', function (req, res) {
 //----Delete------------------------------------------------------------------------------
 //-deleting the product with the specific id
 
-app.delete('/products', function (req, res) {
+app.delete('/warehouse/products', function (req, res) {
     var query = req.query;
 
     //Test that the id has been given
@@ -193,7 +204,7 @@ app.delete('/products', function (req, res) {
 
 //-deleting the material with the specific id
 
-app.delete('/materials', function (req, res) {
+app.delete('/warehouse/materials', function (req, res) {
     var query = req.query;
 
     //Test that the id has been given
@@ -232,4 +243,3 @@ app.delete('/materials', function (req, res) {
     app.listen(80, function() {
         console.log('Server started.');}
     );
-
