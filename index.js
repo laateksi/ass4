@@ -218,45 +218,106 @@ app.delete('/warehouse/products', function (req, res) {
         }
     } else {
         console.log("You must fill id!")
-        data = "Bad request: You must fill id!";
+        data = "Bad request: You must fill id!"; 
         res.status(400).json(data);
     };
 });
+//----Delete------------------------------------------------------------------------------
+//----UPDATE------------------------------------------------------------------------------
+//----update sql field for a material with a certain id
 
-//-deleting the material with the specific id
-
-app.delete('/warehouse/materials', function (req, res) {
+app.put('/warehouse/materials', function (req, res) {
     var query = req.query;
 
     //Test that the id has been given
     if (query.hasOwnProperty('id')) {
         // Test id value is not empty
         if (query.id.length != 0) {
-
             var id = query.id;
+            
+            // Update category
+            if (query.hasOwnProperty('category')) {
+                var category = query.category;
+                connection.query("UPDATE materials SET category='" + category + "'  WHERE material_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
 
-            var check_id = "SELECT material_id FROM materials WHERE material_id='" + id + "'";
-            connection.query(check_id, function (err, rows, fields) {
-                if (rows.length != 0) {
+                        console.log("Material Updated Successfully");
+                        data = "OK. Material Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                // Update type
+            } else if (query.hasOwnProperty('type')) {
+                var type = query.type;
+                connection.query("UPDATE materials SET type='" + type + "'  WHERE material_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
 
-                    connection.query("DELETE FROM materials WHERE material_id='" + id + "'", function (err, rows, fields) {
-                        if (err) {
-                            console.log("Error Deleting data");
-                            data = "Error Deleting data";
-                            res.status(404).json(data); //Not found
-                        } else {
+                        console.log("Material Updated Successfully");
+                        data = "OK. Material Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                // Update quntity
+            } else if (query.hasOwnProperty('quantity')) {
+                var quantity = query.quantity;
+                connection.query("UPDATE materials SET quantity='" + quantity + "'  WHERE material_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
 
-                            console.log("Material Deleted Successfully");
-                            data = "OK. Material Deleted Successfully";
-                            res.status(200).json(data); //OK
-                        }
-                    });
-                } else {
-                    console.log("There is no material with id: " + id);
-                    data = "Bad request: there is no material with id: " + id;
-                    res.status(404).json(data); //Not found
-                }
-            });
+                        console.log("Material Updated Successfully");
+                        data = "OK. Material Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                //UPdate supplier
+            } else if (query.hasOwnProperty('supplier')) {
+                var supplier = query.supplier;
+                connection.query("UPDATE materials SET supplier='" + supplier + "'  WHERE material_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Material Updated Successfully");
+                        data = "OK. Material Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                //Update arrival_date
+            } else if (query.hasOwnProperty('arrival_date')) {
+                var arrival_date = arrival_date;
+                connection.query("UPDATE materials SET arrival_date='" + arrival_date + "'  WHERE material_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Material Updated Successfully");
+                        data = "OK. Material Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+
+            } else {
+                console.log("You have no parametter to update!");
+                data = "Bad request: you have no parametter to update!";
+                res.status(400).json(data);
+                
+            };
+            
 
         } else {
             console.log("id value empty!");
@@ -270,7 +331,112 @@ app.delete('/warehouse/materials', function (req, res) {
     };
 });
 
-//----Delete------------------------------------------------------------------------------
+//----UPDATE products with a certain id---------------------------------------------------
+app.put('/warehouse/products', function (req, res) {
+    var query = req.query;
+
+    //Test that the id has been given
+    if (query.hasOwnProperty('id')) {
+        // Test id value is not empty
+        if (query.id.length != 0) {
+            var id = query.id;
+
+            // Update category
+            if (query.hasOwnProperty('category')) {
+                var category = query.category;
+                connection.query("UPDATE products SET category='" + category + "'  WHERE product_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Product Updated Successfully");
+                        data = "OK. Product Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                // Update type
+            } else if (query.hasOwnProperty('type')) {
+                var type = query.type;
+                connection.query("UPDATE productS SET type='" + type + "'  WHERE product_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Product Updated Successfully");
+                        data = "OK. Product Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                // Update quntity
+            } else if (query.hasOwnProperty('quantity')) {
+                var quantity = query.quantity;
+                connection.query("UPDATE products SET quantity='" + quantity + "'  WHERE product_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Product Updated Successfully");
+                        data = "OK. Product Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                //UPdate supplier
+            } else if (query.hasOwnProperty('customer')) {
+                var customer = query.customer;
+                connection.query("UPDATE products SET customer='" + customer + "'  WHERE product_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Product Updated Successfully");
+                        data = "OK. Product Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+                //Update arrival_date
+            } else if (query.hasOwnProperty('arrival_date')) {
+                var arrival_date = arrival_date;
+                connection.query("UPDATE products SET arrival_date='" + arrival_date + "'  WHERE product_id='" + id + "'", function (err, rows, fields) {
+                    if (err) {
+                        console.log("Error Updating data");
+                        data = "Error Updating data";
+                        res.status(404).json(data); //Not found
+                    } else {
+
+                        console.log("Product Updated Successfully");
+                        data = "OK. Product Updated Successfully.";
+                        res.status(200).json(data); //OK
+                    }
+                });
+
+            } else {
+                console.log("You have no parametter to update!");
+                data = "Bad request: you have no parametter to update!";
+                res.status(400).json(data);
+
+            };
+
+
+        } else {
+            console.log("id value empty!");
+            data = "Bad request: id value empty!";
+            res.status(400).json(data);
+        }
+    } else {
+        console.log("You must fill id!")
+        data = "Bad request: You must fill id!";
+        res.status(400).json(data);
+    };
+});
+//----UPDATE------------------------------------------------------------------------------
 
 app.listen(80, function () {
     console.log('Server started.');
