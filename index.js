@@ -56,6 +56,8 @@ app.get('/warehouse/materials', function (req, res) {
     var quantity = query.quantity;
     var supplier = query.supplier;
     var date = query.arrival_date;
+    var receivedBefore = query.receivedBefore;
+    var receivedAfter = query.receivedAfter;
     var check = 0;
 
     //Start creating the sql query
@@ -103,11 +105,29 @@ app.get('/warehouse/materials', function (req, res) {
             check = 1;
         }
     }
+    //materials for exact arrival_date
     if (query.hasOwnProperty('arrival_date')) {
         if (check != 0) {
             sql_query = sql_query + "AND arrival_date='" + date + "'";
         } else {
             sql_query = sql_query + "arrival_date='" + date + "'";
+            check = 1;
+        }
+    }
+    //next two if-statesments are for sorting materials according to the date
+    if (query.hasOwnProperty('receivedBefore')) {
+        if (check != 0) {
+            sql_query = sql_query + "AND arrival_date<='" + receivedBefore + "'";
+        } else {
+            sql_query = sql_query + "arrival_date<='" + receivedBefore + "'";
+            check = 1;
+        }
+    }
+    if (query.hasOwnProperty('receivedAfter')) {
+        if (check != 0) {
+            sql_query = sql_query + "AND arrival_date>='" + receivedAfter + "'";
+        } else {
+            sql_query = sql_query + "arrival_date>='" + receivedAfter + "'";
             check = 1;
         }
     }
@@ -144,6 +164,8 @@ app.get('/warehouse/products', function (req, res) {
     var quantity = query.quantity;
     var customer = query.customer;
     var date = query.arrival_date;
+    var receivedBefore = query.receivedBefore;
+    var receivedAfter = query.receivedAfter;
     var check = 0;
 
     var sql_query = "SELECT * FROM products WHERE ";
@@ -183,11 +205,29 @@ app.get('/warehouse/products', function (req, res) {
             check = 1;
         }
     }
+    //materials for exact arrival_date
     if (query.hasOwnProperty('arrival_date')) {
         if (check != 0) {
             sql_query = sql_query + "AND arrival_date='" + date + "'";
         } else {
             sql_query = sql_query + "arrival_date='" + date + "'";
+            check = 1;
+        }
+    }
+    //next two if-statesments are for sorting materials according to the date
+    if (query.hasOwnProperty('receivedBefore')) {
+        if (check != 0) {
+            sql_query = sql_query + "AND arrival_date<='" + receivedBefore + "'";
+        } else {
+            sql_query = sql_query + "arrival_date<='" + receivedBefore + "'";
+            check = 1;
+        }
+    }
+    if (query.hasOwnProperty('receivedAfter')) {
+        if (check != 0) {
+            sql_query = sql_query + "AND arrival_date>='" + receivedAfter + "'";
+        } else {
+            sql_query = sql_query + "arrival_date>='" + receivedAfter + "'";
             check = 1;
         }
     }
