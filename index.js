@@ -13,11 +13,11 @@ var connection = mysql.createConnection({
 });
 //instructions for the user - will be shown in the /warehouse view
 var instructions = {
-    SearchingMaterials: "You can seacrch materials with parameters: 'id, category, type, quantity, supplier, arrival_date, receivedBefore, receivedAfter.",
-    SearchingProducts: "You can seacrch products with parameters: 'id, category, type, quantity, customer, arrival_date, receivedBefore, receivedAfter.",
+    Searching_Materials: "You can search materials with parameters: 'id, category, type, quantity, supplier, arrival_date, receivedBefore, receivedAfter.",
+    Searching_Products: "You can search products with parameters: 'id, category, type, quantity, customer, arrival_date, receivedBefore, receivedAfter.",
     Deleting: "You can delete existing materials or products with the specific id.",
-    Updating: "You can update existing material or product information with the specific id. Fill in the id as a parameter ad value for the id. Then you can assign update one of the fields (category, type, quantity, supplier, customer, arrival_date) for that material/prduct.",
-    Adding: "You can add materials or products by filling the parameters for category, type, quantity, supplier(for material), costomer(for product) and arrival_date. The id for material/product will be generated automatically. You can also insert 'assigned' parameter if needed.",
+    Updating: "You can update existing material or product information with the specific id. Fill in the material_id or product_id with key: 'id' and value for the id. Then you can assign update one of the fields (category, type, quantity, supplier, customer, arrival_date and the key 'assign' for assigning materials) for that material/prduct.",
+    Adding: "You can add materials or products by filling the parameters for category, type, quantity, supplier(for material), customer(for product) and arrival_date. The id for material/product will be generated automatically.",
     Other: "Using other parameters than described above will result in error. with other error situations, you will be will be given additional information. You are able to navigate in the postman via links /warehouse, /warehouse/materials, /warehouse/products."
 };
 app.use(bodyParser.urlencoded({ extended: false }));
